@@ -10,17 +10,25 @@
 <body>
     <div id="container">
         <header id="header">
-            <h1>Coding Quiz Challenge</h1>
+            <h1 id="headerTitle">Coding Quiz Challenge</h1>
+            <p id="timer">TIMER</p>
         </header>
         <h2 id="questions">Answer the following JavaScript related questions. Understand that an incorrect answer will take 15 seconds off of your time remaining!</h2>
         <button id="start-btn">Start Quiz!</button>
         <div id="choices">
-            <ul>
-                <li id="choice1"></li>
-                <li id="choice2"></li>
-                <li id="choice3"></li>
-                <li id="choice4"></li>
-            </ul>
+            <ol>
+                <li><span id="choice1"></span></li>
+                <li><span id="choice2"></span></li>
+                <li><span id="choice3"></span></li>
+                <li><span id="choice4"></span></li>
+            </ol>
+        </div>
+        <div>'
+            <form action="highscores.html">
+            <input id="highscore" type="text" placeholder="Enter Initials" maxlength="3" onsubmit="highscore()">
+            <input id="hsSubmit" type="submit" value="Submit">
+            </form>
+
         </div>
     </div>
     <script src="./assets/js/questions.js"></script>

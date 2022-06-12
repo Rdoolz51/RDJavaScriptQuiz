@@ -1,21 +1,41 @@
 var containerEl = document.querySelector("#container");
 var startButtonEl = document.querySelector("#start-btn")
-var headerEl = document.querySelector("#header")
+var headerEl = document.querySelector("#headerTitle")
 var questionsEl = document.querySelector("#questions")
 var choicesEl = document.querySelector("#choices")
 var choice1El = choicesEl.querySelector("#choice1")
 var choice2El = choicesEl.querySelector("#choice2")
 var choice3El = choicesEl.querySelector("#choice3")
 var choice4El = choicesEl.querySelector("#choice4")
+var timerEl = document.querySelector("#timer");
+var submitEl = document.querySelector("#hsSubmit");
+var inputEl = document.querySelector("#highscore");
 var currentQuestion = 0;
+var timeLeft = 75;
+var timeCounter = setInterval(timerFunction, 1000);
+
 
 //starts the quiz on button click.
-startButtonEl.addEventListener("click" , function() {
+startButtonEl.addEventListener("click" , function(timeCounter) {
 startButtonEl.style.display = "none";
 displayNextQuestion();
+choicesEl.style.display = "contents";
+headerEl.style.textDecoration = "underline"
+startButtonEl.removeEventListener;
+timerEl.style.display = "contents"
+timerEl.textContent = "Good Luck!";
+setTimeout(function() {
+    timeLeft = 75;
+    timerEl.style.display = "contents";
+    timerEl.textContent = timeLeft + " seconds remaining!";
+},500);
 });
 
-choicesEl.addEventListener("click", evaluateAnswer);
+
+choice1El.addEventListener("click", evaluateAnswer);
+choice2El.addEventListener("click", evaluateAnswer);
+choice3El.addEventListener("click", evaluateAnswer);
+choice4El.addEventListener("click", evaluateAnswer);
 
 function evaluateAnswer(event) {
 
@@ -27,17 +47,21 @@ function evaluateAnswer(event) {
         {
             if (questions[currentQuestion].choices[i].isCorrect == false)
             {
-                //deduct 15seconds
-                console.log("Time - 15 seconds");
+                timeLeft -= 15;
+                if(timeLeft <= 0) {timeLeft = 0;}
+                console.log("WRONG ANSWER");
             }
+            console.log(timeLeft + " seconds left.");
         }
     }
-    console.log(" " + questions[currentQuestion].choices[i].text)
-    console.log(choiceSelected.textContent)
     currentQuestion++;
-    if(currentQuestion === questions.length)
+
+    if(currentQuestion == questions.length)
     {
-        alert("Game Over!")
+      clearInterval(timeCounter);
+      timerEl.textContent = timeLeft + " seconds remaining!";
+      gameOver();
+
     }
     else {
         displayNextQuestion();
@@ -45,14 +69,54 @@ function evaluateAnswer(event) {
 }
 
 function displayNextQuestion() {
-    console.log(currentQuestion)
 
     headerEl.textContent = "Question " + questions[currentQuestion].id;
 
     questionsEl.textContent = questions[currentQuestion].question;
 
-    choice1El.textContent = "(1.) " + questions[currentQuestion].choices[0].text;
-    choice2El.textContent = "(2.) " + questions[currentQuestion].choices[1].text;
-    choice3El.textContent = "(3.) " + questions[currentQuestion].choices[2].text;
-    choice4El.textContent = "(4.) " + questions[currentQuestion].choices[3].text;
+    choice1El.textContent = questions[currentQuestion].choices[0].text;
+    choice2El.textContent = questions[currentQuestion].choices[1].text;
+    choice3El.textContent = questions[currentQuestion].choices[2].text;
+    choice4El.textContent = questions[currentQuestion].choices[3].text;
+}
+
+function timerFunction(timeCounter) {
+    if(timeLeft <= 0) {
+        timeLeft = 0;
+        clearInterval(timeCounter);
+        timerEl.textContent = timeLeft + " seconds remaining!";
+    }
+    else {
+    timeLeft--;
+    timerEl.textContent = timeLeft + " seconds remaining!";
+    }
+}
+
+function gameOver() {
+    choicesEl.style.display = "none";
+    headerEl.style.alignItems = "center";
+    inputEl.style.display = "block";
+    questionsEl.textContent = "Your final score is: " + timeLeft;
+    timerEl.style.display = "none";
+    submitEl.setAttribute("onSubmit", "highscore()")
+
+
+    if(timeLeft >= 50) {
+        headerEl.textContent = "Very Well Done!";
+        headerEl.style.paddingLeft = "55px"
+    }
+    else if (timeLeft >= 20) {
+        headerEl.textContent = "Well Done!";
+        headerEl.style.paddingLeft = "90px"
+    }
+    else {
+        headerEl.textContent = "Oof!";
+        headerEl.style.paddingLeft = "135px";
+    }
+
+}
+
+function highScore() {
+    localStorage.setItem("HighScore", timeLeft);
+    localStorage.setItem("Name", inputEl.textContent);
 }

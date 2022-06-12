@@ -91,11 +91,6 @@ var questions =
     {
         id: "5",
         question: "Which event occurs when the user clicks on an HTML element?",
-        WAnswer1: "onmouseclick",
-        WAnswer2: "onchange",
-        WAnswer3: "onmouseover",
-        CAnswer: "onclick",
-
         choices: [
             {
                 text:"onmouseclick", 
