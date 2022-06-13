@@ -126,7 +126,6 @@ if (parseInt(questionsEl.textContent) > checkScore.score) {
 }
 
 function highScore(event) {
-    // event.preventDefault();
     var score = {
         name: inputEl.value,
         score: parseInt(questionsEl.textContent)
@@ -138,7 +137,6 @@ function highScore(event) {
 
     var checkScore = JSON.parse(localStorage.getItem("Score"));
 
-   // console.log(checkScore.score);
 
     if (checkScore.score < parseInt(questionsEl.textContent)){
         var saveScore = localStorage.setItem("Score", JSON.stringify(score));

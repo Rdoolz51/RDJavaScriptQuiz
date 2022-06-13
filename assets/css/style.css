@@ -89,6 +89,7 @@ h2 {
     
 }
 
+
 li span {
     position: relative;
     left: 10px;
@@ -118,6 +119,9 @@ select {
     color:black;
 }
 
+#placementsH3 {
+
+}
 div form button {
     width: 50px;
     height: 25px;
