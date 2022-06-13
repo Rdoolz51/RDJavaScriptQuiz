@@ -8,11 +8,17 @@ var choice2El = choicesEl.querySelector("#choice2")
 var choice3El = choicesEl.querySelector("#choice3")
 var choice4El = choicesEl.querySelector("#choice4")
 var timerEl = document.querySelector("#timer");
-var submitEl = document.querySelector("#hsSubmit");
 var inputEl = document.querySelector("#highscore");
+var submitEl = document.querySelector("#hsSubmit");
+var linkEl = document.querySelector("#viewHS")
+var placementEl = document.querySelector("#placementsH2")
 var currentQuestion = 0;
 var timeLeft = 75;
-var timeCounter = setInterval(timerFunction, 1000);
+timerEl.style.display = "contents";
+timerEl.textContent = timeLeft + " seconds remaining!";
+var timeCounter;
+
+var checkScore = highScore();
 
 
 //starts the quiz on button click.
@@ -20,15 +26,12 @@ startButtonEl.addEventListener("click" , function(timeCounter) {
 startButtonEl.style.display = "none";
 displayNextQuestion();
 choicesEl.style.display = "contents";
-headerEl.style.textDecoration = "underline"
+linkEl.style.display = "none";
+
 startButtonEl.removeEventListener;
-timerEl.style.display = "contents"
-timerEl.textContent = "Good Luck!";
-setTimeout(function() {
-    timeLeft = 75;
-    timerEl.style.display = "contents";
-    timerEl.textContent = timeLeft + " seconds remaining!";
-},500);
+timerEl.style.display = "contents";
+timeCounter = setInterval(timerFunction, 1000);
+timerEl.textContent = timeLeft + " seconds remaining!";
 });
 
 
@@ -61,7 +64,6 @@ function evaluateAnswer(event) {
       clearInterval(timeCounter);
       timerEl.textContent = timeLeft + " seconds remaining!";
       gameOver();
-
     }
     else {
         displayNextQuestion();
@@ -85,21 +87,24 @@ function timerFunction(timeCounter) {
         timeLeft = 0;
         clearInterval(timeCounter);
         timerEl.textContent = timeLeft + " seconds remaining!";
+        gameOver();
     }
     else {
     timeLeft--;
     timerEl.textContent = timeLeft + " seconds remaining!";
     }
+    return timeLeft;
 }
 
-function gameOver() {
+function gameOver(event) {
     choicesEl.style.display = "none";
     headerEl.style.alignItems = "center";
     inputEl.style.display = "block";
-    questionsEl.textContent = "Your final score is: " + timeLeft;
+    questionsEl.textContent = timeLeft;
     timerEl.style.display = "none";
-    submitEl.setAttribute("onSubmit", "highscore()")
+    submitEl.style.display = "block";
 
+    submitEl.addEventListener("click", highScore);
 
     if(timeLeft >= 50) {
         headerEl.textContent = "Very Well Done!";
@@ -113,10 +118,31 @@ function gameOver() {
         headerEl.textContent = "Oof!";
         headerEl.style.paddingLeft = "135px";
     }
+var checkScore = JSON.parse(localStorage.getItem("Score"));
 
+if (parseInt(questionsEl.textContent) > checkScore.score) {
+    questionsEl.textContent = timeLeft + " : This is a new HighScore!"
+}
 }
 
-function highScore() {
-    localStorage.setItem("HighScore", timeLeft);
-    localStorage.setItem("Name", inputEl.textContent);
+function highScore(event) {
+    // event.preventDefault();
+    var score = {
+        name: inputEl.value,
+        score: parseInt(questionsEl.textContent)
+    }
+    
+    if(localStorage.getItem("Score") === null) {
+        var saveScore = localStorage.setItem("Score", JSON.stringify(score));
+    }
+
+    var checkScore = JSON.parse(localStorage.getItem("Score"));
+
+   // console.log(checkScore.score);
+
+    if (checkScore.score < parseInt(questionsEl.textContent)){
+        var saveScore = localStorage.setItem("Score", JSON.stringify(score));
+
+    }
+    return checkScore;
 }

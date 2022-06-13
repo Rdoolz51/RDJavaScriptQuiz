@@ -11,7 +11,7 @@
     <div id="container">
         <header id="header">
             <h1 id="headerTitle">Coding Quiz Challenge</h1>
-            <p id="timer">TIMER</p>
+            <p id="timer"></p>
         </header>
         <h2 id="questions">Answer the following JavaScript related questions. Understand that an incorrect answer will take 15 seconds off of your time remaining!</h2>
         <button id="start-btn">Start Quiz!</button>
@@ -23,11 +23,15 @@
                 <li><span id="choice4"></span></li>
             </ol>
         </div>
-        <div>'
-            <form action="highscores.html">
-            <input id="highscore" type="text" placeholder="Enter Initials" maxlength="3" onsubmit="highscore()">
-            <input id="hsSubmit" type="submit" value="Submit">
+        <div>
+            <form onSubmit="">
+            <input id="highscore" type="text" placeholder="Enter Initials" maxlength="3" value="">
+            <button id="hsSubmit" type="submit" value="Submit">Save</button>
             </form>
+
+            <div id="viewHS">
+                <a href="./highscores.html">View HighScores</p>
+            </div>
 
         </div>
     </div>
