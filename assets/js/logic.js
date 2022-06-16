@@ -13,6 +13,7 @@ var submitEl = document.querySelector("#hsSubmit");
 var linkEl = document.querySelector("#viewHS")
 var placementEl = document.querySelector("#placementsH2")
 var currentQuestion = 0;
+//the next 4 lines display the timer but do not start the timer yet.
 var timeLeft = 75;
 timerEl.style.display = "contents";
 timerEl.textContent = timeLeft + " seconds remaining!";
@@ -21,7 +22,7 @@ var timeCounter;
 var checkScore = highScore();
 
 
-//starts the quiz on button click.
+//starts the quiz on button click. also starts timer.
 startButtonEl.addEventListener("click" , function(timeCounter) {
 startButtonEl.style.display = "none";
 displayNextQuestion();
@@ -30,11 +31,12 @@ linkEl.style.display = "none";
 
 startButtonEl.removeEventListener;
 timerEl.style.display = "contents";
+//actually begins the timer
 timeCounter = setInterval(timerFunction, 1000);
 timerEl.textContent = timeLeft + " seconds remaining!";
 });
 
-
+//listens for clicks on on each of the choices.
 choice1El.addEventListener("click", evaluateAnswer);
 choice2El.addEventListener("click", evaluateAnswer);
 choice3El.addEventListener("click", evaluateAnswer);
@@ -50,6 +52,7 @@ function evaluateAnswer(event) {
         {
             if (questions[currentQuestion].choices[i].isCorrect == false)
             {
+                //subtracts 15 seconds from timer for wrong answers and makes sure the timer doesn't go below 0.
                 timeLeft -= 15;
                 if(timeLeft <= 0) {timeLeft = 0;}
                 console.log("WRONG ANSWER");
@@ -61,17 +64,19 @@ function evaluateAnswer(event) {
 
     if(currentQuestion == questions.length)
     {
+        //if no more questions, end game.
       clearInterval(timeCounter);
       timerEl.textContent = timeLeft + " seconds remaining!";
       gameOver();
     }
     else {
-        displayNextQuestion();
+        displayNextQuestion(); 
     }
 }
 
 function displayNextQuestion() {
 
+    //reads questions and choices from the questions.js file into the html elements as text
     headerEl.textContent = "Question " + questions[currentQuestion].id;
 
     questionsEl.textContent = questions[currentQuestion].question;
@@ -97,6 +102,7 @@ function timerFunction(timeCounter) {
 }
 
 function gameOver(event) {
+    //changes the display of the screen from quiz mode to submit high score mode.
     choicesEl.style.display = "none";
     headerEl.style.alignItems = "center";
     inputEl.style.display = "block";
@@ -126,18 +132,21 @@ if (parseInt(questionsEl.textContent) > checkScore.score) {
 }
 
 function highScore(event) {
+    //stores the score and user input initials into an object called score.
     var score = {
         name: inputEl.value,
         score: parseInt(questionsEl.textContent)
     }
     
+    //checks to see if a score has ever been submitted, if not, it sets the highscore to the new submission.
     if(localStorage.getItem("Score") === null) {
+        //sends the items into local storage in string format, so it can store all relevant information in one "key" called Score
         var saveScore = localStorage.setItem("Score", JSON.stringify(score));
     }
 
     var checkScore = JSON.parse(localStorage.getItem("Score"));
 
-
+    //checks to see if current score is better than high score. If it is, it replaces the High score, if not, it does nothing.
     if (checkScore.score < parseInt(questionsEl.textContent)){
         var saveScore = localStorage.setItem("Score", JSON.stringify(score));
 
